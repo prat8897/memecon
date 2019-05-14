@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:memecon/login_page.dart';
 import 'package:memecon/home_page.dart';
 import 'package:memecon/settings_page.dart';
+import 'package:memecon/pageview_screen.dart';
 import 'package:flutter/services.dart';
 
 void main() {
@@ -15,6 +16,7 @@ class MyApp extends StatelessWidget {
     LoginPage.tag: (context) => LoginPage(),
     HomePage.tag: (context) => HomePage(),
     SettingsPage.tag: (context) => SettingsPage(),
+    PageViewScreen.tag: (context) => PageViewScreen(),
   };
 
   @override

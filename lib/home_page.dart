@@ -10,6 +10,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  List <String> imgurlinks = [
+    'https://i.imgur.com/6hhWdTB.jpg',
+    'https://i.imgur.com/3qEXYZT.jpg',
+    'https://i.imgur.com/ubYYBBd.jpg',
+    'https://i.imgur.com/RvtTFv1.jpg',
+  ];
+
   @override
   Widget build(BuildContext context) {
     var leftdrawer = Drawer(
@@ -56,21 +64,23 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
-
-    List <String> imgurlinks = [
-      'https://i.imgur.com/6hhWdTB.jpg',
-      'https://i.imgur.com/3qEXYZT.jpg',
-      'https://i.imgur.com/ubYYBBd.jpg',
-      'https://i.imgur.com/RvtTFv1.jpg',
-    ];
     
+    Widget buildimagecard(link){
+      return GestureDetector(
+        onTap: () {
+          Navigator.of(context).pushNamed(PageViewScreen.tag);
+        },
+        child: Image.network(link),
+      );
+    }
+
     final body = GridView.count(
       primary: false,
       padding: const EdgeInsets.all(20.0),
       crossAxisSpacing: 10.0,
       crossAxisCount: 2,
       children: <Widget>[
-        for (var link in imgurlinks) Image.network(link)
+        for (var link in imgurlinks) buildimagecard(link)
       ],
     );
 
