@@ -1,53 +1,90 @@
 import 'package:flutter/material.dart';
+import 'package:memecon/settings_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   static String tag = 'home-page';
 
   @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  @override
   Widget build(BuildContext context) {
-    final alucard = Hero(
-      tag: 'hero',
-      child: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: CircleAvatar(
-          radius: 72.0,
-          backgroundColor: Colors.transparent,
-          backgroundImage: AssetImage('assets/alucard.jpg'),
-        ),
+    var leftdrawer = Drawer(
+      child: ListView(
+        children: <Widget>[
+          DrawerHeader(
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/background.png'),
+                      fit: BoxFit.cover,
+                    ),
+                    
+                  ),  
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/logo.png'),
+                    ),
+                  ),  
+                ),
+              ]
+            )
+          ),
+          ListTile(
+            title: Text('Settings'),
+            onTap: () {
+              // Update the state of the app
+              // ...
+              Navigator.of(context).pushNamed(SettingsPage.tag);
+            },
+          ),
+          ListTile(
+            title: Text('Item 2'),
+            onTap: () {
+              // Update the state of the app
+              // ...
+              Navigator.pop(context);
+            },
+          ),
+        ],
       ),
     );
 
-    final welcome = Padding(
-      padding: EdgeInsets.all(8.0),
-      child: Text(
-        'Welcome to MemeEconomy',
-        style: TextStyle(fontSize: 28.0, color: Colors.white),
-      ),
-    );
-
-    final lorem = Padding(
-      padding: EdgeInsets.all(8.0),
-      child: Text(
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec hendrerit condimentum mauris id tempor. Praesent eu commodo lacus. Praesent eget mi sed libero eleifend tempor. Sed at fringilla ipsum. Duis malesuada feugiat urna vitae convallis. Aliquam eu libero arcu.',
-        style: TextStyle(fontSize: 16.0, color: Colors.white),
-      ),
-    );
-
-    final body = Container(
-      width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.all(28.0),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [
-          Colors.blue,
-          Colors.lightBlueAccent,
-        ]),
-      ),
-      child: Column(
-        children: <Widget>[alucard, welcome, lorem],
-      ),
+    List <String> imgurlinks = [
+      'https://i.imgur.com/6hhWdTB.jpg',
+      'https://i.imgur.com/3qEXYZT.jpg',
+      'https://i.imgur.com/ubYYBBd.jpg',
+      'https://i.imgur.com/RvtTFv1.jpg',
+    ];
+    
+    final body = GridView.count(
+      primary: false,
+      padding: const EdgeInsets.all(20.0),
+      crossAxisSpacing: 10.0,
+      crossAxisCount: 2,
+      children: <Widget>[
+        for (var link in imgurlinks) Image.network(link)
+      ],
     );
 
     return Scaffold(
+      key: _scaffoldKey,
+      drawer: leftdrawer,
+      appBar: AppBar(
+        leading: IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () => _scaffoldKey.currentState.openDrawer()
+        ),
+        centerTitle: true,
+        title: Text("/r/MemeEconomy"),
+      ),
       body: body,
     );
   }

@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:memecon/login_page.dart';
 import 'package:memecon/home_page.dart';
+import 'package:memecon/settings_page.dart';
+import 'package:flutter/services.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(MyApp());
+  SystemChrome.setEnabledSystemUIOverlays([]);
+}
 
 class MyApp extends StatelessWidget {
+  
   final routes = <String, WidgetBuilder>{
     LoginPage.tag: (context) => LoginPage(),
     HomePage.tag: (context) => HomePage(),
+    SettingsPage.tag: (context) => SettingsPage(),
   };
 
   @override
@@ -16,7 +23,7 @@ class MyApp extends StatelessWidget {
       title: 'Kodeversitas',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.lightBlue,
+        primarySwatch: Colors.teal,
         fontFamily: 'Nunito',
       ),
       home: LoginPage(),

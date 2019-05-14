@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () {
-          Navigator.of(context).pushNamed(HomePage.tag);
+          Navigator.of(context).pushReplacementNamed(HomePage.tag);
           print("the sign in button is getting pressed");
         },
         padding: EdgeInsets.all(12),
