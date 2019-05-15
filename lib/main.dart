@@ -3,15 +3,38 @@ import 'package:memecon/login_page.dart';
 import 'package:memecon/home_page.dart';
 import 'package:memecon/settings_page.dart';
 import 'package:memecon/pageview_screen.dart';
+import 'package:memecon/Services/auth_flow.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-void main() {
-  runApp(MyApp());
+void main() async {
+
+  Widget _defaultHome = LoginPage();
+
+  try {
+    final storage = new FlutterSecureStorage();
+    String redditCredentialsJSON = await storage.read(key: "credentialsJSON");
+
+    if (redditCredentialsJSON != null){
+      restoreRedditUser(redditCredentialsJSON);
+      Widget _defaultHome = HomePage();
+    }
+  } catch(e) {
+    print("storage read didn't work" + e);
+  }  
+
   SystemChrome.setEnabledSystemUIOverlays([]);
+  runApp(MyApp(defaultHome: _defaultHome,));
 }
 
 class MyApp extends StatelessWidget {
-  
+  Widget defaultHome;
+
+  MyApp({
+    Key key,
+    @required Widget this.defaultHome,
+  }) : super(key: key);
+
   final routes = <String, WidgetBuilder>{
     LoginPage.tag: (context) => LoginPage(),
     HomePage.tag: (context) => HomePage(),
@@ -22,13 +45,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Kodeversitas',
+      title: 'Memecon',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.teal,
         fontFamily: 'Nunito',
       ),
-      home: LoginPage(),
+      home: defaultHome,
       routes: routes,
     );
   }
