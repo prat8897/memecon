@@ -3,7 +3,6 @@ import 'package:draw/draw.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-
 String clientId = "-hEXzInaY1Mrrw";
 String clientSecret = "";
 String userAgent = "test_flutter";
@@ -17,23 +16,29 @@ Future<Null> initializeRedditUser() async {
     redirectUri: redirectUri,
   );
 
+  //Generate the authentication URI
   final authUrl = reddit.auth.url(['*'], userAgent, compactLogin: true);
-  print("AUTH URL:" + authUrl.toString());
 
+  //Go to reddit.com via chrome, login, and authenticate app with client
   final result = await FlutterWebAuth.authenticate(url: authUrl.toString(), callbackUrlScheme: "memeconapp");
-  print("THE RESULT IS: " + result.toString());
-  
+
+  //Parse access code from callback Uri
   final accessCode = Uri.parse(result).queryParameters['code'].toString();
-  print("THE ACCESS CODE IS: " + accessCode);
+
+  //authorise app with reddit
   await reddit.auth.authorize(accessCode);
+
+  print("AUTH URL:" + authUrl.toString());
+  print("THE CALLBACK RESULT IS: " + result.toString());
+  print("THE ACCESS CODE IS: " + accessCode);
   print(await reddit.user.me());
   print(reddit.auth.credentials.toJson().toString());
 
+  //Flutter Secure Storage to save reddit credentials
+  //https://github.com/mogol/flutter_secure_storage
+  
   final storage = new FlutterSecureStorage();
   await storage.write(key: "credentialsJSON", value: reddit.auth.credentials.toJson().toString());
-
-  //String credentials = await storage.read(key: "credentialsJSON");
-  //print(credentials);
 }
 
 Future<Null> restoreRedditUser(credentialsJSON) async {
@@ -44,4 +49,5 @@ Future<Null> restoreRedditUser(credentialsJSON) async {
     userAgent: userAgent,
     redirectUri: redirectUri,
   );
+  print(await reddit.user.me());
 }
