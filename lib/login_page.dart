@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memecon/home_page.dart';
+import 'Services/auth_flow.dart';
 
 class LoginPage extends StatefulWidget {
   static String tag = 'login-page';
@@ -10,6 +11,18 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
+
+    void submit() async {
+      try {
+        await initializeRedditUser();
+        //setState(() => authState = AuthState.Success);
+        Navigator.of(context).pushReplacementNamed(HomePage.tag);
+        print("the sign in button just got clicked");
+      } catch (e) {
+        //setState(() => authState = AuthState.Failed);
+      }
+    }
+
     final logo = Hero(
       tag: 'hero',
       child: CircleAvatar(
@@ -47,10 +60,7 @@ class _LoginPageState extends State<LoginPage> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
         ),
-        onPressed: () {
-          Navigator.of(context).pushReplacementNamed(HomePage.tag);
-          print("the sign in button is getting pressed");
-        },
+        onPressed: submit,
         padding: EdgeInsets.all(12),
         color: Colors.lightBlueAccent,
         child: Text('Log In', style: TextStyle(color: Colors.white)),
