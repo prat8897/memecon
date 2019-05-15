@@ -29,21 +29,19 @@ Future<Null> initializeRedditUser() async {
   print(await reddit.user.me());
   print(reddit.auth.credentials.toJson().toString());
 
-  //final credentialsJSON = reddit.auth.credentials.toJson();
-  
-  /* reddit.auth.credentials.toJson() = 
-  {
-  "accessToken":"55508104-Sn9ODLvo_kcv1w9S0AfyOD-LxiM",
-  "refreshToken":"55508104-VE3Pmnv76cYviVXs2dTHH0VS-es",
-  "tokenEndpoint":"https://www.reddit.com/api/v1/access_token",
-  "scopes":["*"],
-  "expiration":1557955337803
-  }
-  */
-
   final storage = new FlutterSecureStorage();
   await storage.write(key: "credentialsJSON", value: reddit.auth.credentials.toJson().toString());
 
-  String credentials = await storage.read(key: "credentialsJSON");
-  print(credentials);
+  //String credentials = await storage.read(key: "credentialsJSON");
+  //print(credentials);
+}
+
+Future<Null> restoreRedditUser(credentialsJSON) async {
+  final reddit = await Reddit.restoreAuthenticatedInstance(
+    credentialsJSON,
+    clientId: clientId,
+    clientSecret: clientSecret,
+    userAgent: userAgent,
+    redirectUri: redirectUri,
+  );
 }
