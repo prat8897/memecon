@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:draw/draw.dart';
-//import 'package:flutter_web_auth/flutter_web_auth.dart';
+import 'package:flutter_web_auth/flutter_web_auth.dart';
 
 
 String clientId = "-hEXzInaY1Mrrw";
@@ -19,12 +19,11 @@ Future<Null> initializeRedditUser() async {
   final authUrl = reddit.auth.url(['*'], userAgent, compactLogin: true);
   print("AUTH URL:" + authUrl.toString());
 
-  /*
-  final result = await FlutterWebAuth.authenticate(url: authUrl.toString(), callbackUrlScheme: "memecon8897://flutter_app");
+  final result = await FlutterWebAuth.authenticate(url: authUrl.toString(), callbackUrlScheme: "memeconapp");
   print("THE RESULT IS: " + result.toString());
+  
   final accessCode = Uri.parse(result).queryParameters['code'].toString();
   print("THE ACCESS CODE IS: " + accessCode);
   await reddit.auth.authorize(accessCode);
   print(await reddit.user.me());
-  */
 }
