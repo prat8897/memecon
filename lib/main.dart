@@ -9,30 +9,29 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() async {
 
-  Widget _defaultHome = LoginPage();
-
-  try {
-    final storage = new FlutterSecureStorage();
-    String redditCredentialsJSON = await storage.read(key: "credentialsJSON");
-
-    if (redditCredentialsJSON != null){
-      restoreRedditUser(redditCredentialsJSON);
-      Widget _defaultHome = HomePage();
-    }
-  } catch(e) {
-    print("storage read didn't work" + e);
-  }  
-
   SystemChrome.setEnabledSystemUIOverlays([]);
-  runApp(MyApp(defaultHome: _defaultHome,));
+
+  final storage = new FlutterSecureStorage();
+
+  await storage.read(key: "credentialsJSON").then(
+    (redditCredentialsJSON) {
+      print("ATTENTION JSON STORAGE is " + redditCredentialsJSON.toString());
+      if (redditCredentialsJSON == null){
+        runApp(MyApp(defaultHome: LoginPage(),));
+      } else {
+        restoreRedditUser(redditCredentialsJSON);
+        runApp(MyApp(defaultHome: HomePage(),));
+      }
+    }
+  );
 }
 
 class MyApp extends StatelessWidget {
-  Widget defaultHome;
+  final Widget defaultHome;
 
   MyApp({
     Key key,
-    @required Widget this.defaultHome,
+    @required this.defaultHome,
   }) : super(key: key);
 
   final routes = <String, WidgetBuilder>{
