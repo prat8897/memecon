@@ -20,7 +20,7 @@ class _PageViewScreenState extends State<PageViewScreen> {
 
     Widget _buildPageView(context, position) {
       return Image.network('https://i.imgur.com/6hhWdTB.jpg');
-    };
+    }
 
     return Scaffold(
       body: PageView.builder(
