@@ -9,13 +9,17 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() async {
 
+  //Hide Status Bar
   SystemChrome.setEnabledSystemUIOverlays([]);
+
+  //Flutter Secure Storage to save reddit credentials
+  //https://github.com/mogol/flutter_secure_storage
 
   final storage = new FlutterSecureStorage();
 
   await storage.read(key: "credentialsJSON").then(
     (redditCredentialsJSON) {
-      print("ATTENTION JSON STORAGE is " + redditCredentialsJSON.toString());
+      print("ATTENTION JSON STORAGE IS " + redditCredentialsJSON.toString());
       if (redditCredentialsJSON == null){
         runApp(MyApp(defaultHome: LoginPage(),));
       } else {
