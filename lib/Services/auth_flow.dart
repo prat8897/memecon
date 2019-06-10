@@ -8,7 +8,7 @@ String clientSecret = "";
 String userAgent = "test_flutter";
 Uri redirectUri = Uri.parse("memeconapp://login");
 
-Future<Null> initializeRedditUser() async {
+Future<Reddit> initializeRedditUser() async {
   final reddit = Reddit.createWebFlowInstance(
     clientId: clientId,
     clientSecret: clientSecret,
@@ -39,9 +39,11 @@ Future<Null> initializeRedditUser() async {
   
   final storage = new FlutterSecureStorage();
   await storage.write(key: "credentialsJSON", value: reddit.auth.credentials.toJson().toString());
+
+  return reddit;
 }
 
-Future<Null> restoreRedditUser(credentialsJSON) async {
+Future<Reddit> restoreRedditUser(credentialsJSON) async {
   final reddit = await Reddit.restoreAuthenticatedInstance(
     credentialsJSON,
     clientId: clientId,
@@ -50,4 +52,5 @@ Future<Null> restoreRedditUser(credentialsJSON) async {
     redirectUri: redirectUri,
   );
   print(await reddit.user.me());
+  return reddit;
 }

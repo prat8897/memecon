@@ -17,14 +17,17 @@ void main() async {
 
   final storage = new FlutterSecureStorage();
 
+  //await storage.delete(key: "credentialsJSON");
+
   await storage.read(key: "credentialsJSON").then(
     (redditCredentialsJSON) {
       print("ATTENTION JSON STORAGE IS " + redditCredentialsJSON.toString());
       if (redditCredentialsJSON == null){
         runApp(MyApp(defaultHome: LoginPage(),));
       } else {
-        restoreRedditUser(redditCredentialsJSON);
-        runApp(MyApp(defaultHome: HomePage(),));
+        restoreRedditUser(redditCredentialsJSON).then((reddit){
+          runApp(MyApp(defaultHome: HomePage(reddit: reddit,),));
+        }); 
       }
     }
   );
@@ -40,7 +43,7 @@ class MyApp extends StatelessWidget {
 
   final routes = <String, WidgetBuilder>{
     LoginPage.tag: (context) => LoginPage(),
-    HomePage.tag: (context) => HomePage(),
+    HomePage.tag: (context) => HomePage(reddit: null,),
     SettingsPage.tag: (context) => SettingsPage(),
     PageViewScreen.tag: (context) => PageViewScreen(),
   };
