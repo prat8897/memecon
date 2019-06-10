@@ -8,7 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() async {
-
   //Hide Status Bar
   SystemChrome.setEnabledSystemUIOverlays([]);
 
@@ -19,18 +18,22 @@ void main() async {
 
   //await storage.delete(key: "credentialsJSON");
 
-  await storage.read(key: "credentialsJSON").then(
-    (redditCredentialsJSON) {
-      print("ATTENTION JSON STORAGE IS " + redditCredentialsJSON.toString());
-      if (redditCredentialsJSON == null){
-        runApp(MyApp(defaultHome: LoginPage(),));
-      } else {
-        restoreRedditUser(redditCredentialsJSON).then((reddit){
-          runApp(MyApp(defaultHome: HomePage(reddit: reddit,),));
-        }); 
-      }
+  await storage.read(key: "credentialsJSON").then((redditCredentialsJSON) {
+    print("ATTENTION JSON STORAGE IS " + redditCredentialsJSON.toString());
+    if (redditCredentialsJSON == null) {
+      runApp(MyApp(
+        defaultHome: LoginPage(),
+      ));
+    } else {
+      restoreRedditUser(redditCredentialsJSON).then((reddit) {
+        runApp(MyApp(
+          defaultHome: HomePage(
+            reddit: reddit,
+          ),
+        ));
+      });
     }
-  );
+  });
 }
 
 class MyApp extends StatelessWidget {

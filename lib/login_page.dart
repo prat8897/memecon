@@ -13,14 +13,17 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-
     void submit() async {
       setState(() => this._status = 'loading');
       try {
-        await initializeRedditUser();
-        setState(() => this._status = 'success!');
-        Navigator.of(context).pushReplacementNamed(HomePage.tag);
-        print("the sign in button just got clicked");
+        await initializeRedditUser().then((reddit) {
+          setState(() => this._status = 'success!');
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage(reddit: reddit,)),
+          );
+          print("the sign in button just got clicked");
+        });
       } catch (e) {
         setState(() => this._status = 'failed');
       }
