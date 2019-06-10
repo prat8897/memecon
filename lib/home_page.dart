@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:memecon/settings_page.dart';
 import 'package:memecon/pageview_screen.dart';
 import 'package:memecon/Services/auth_flow.dart';
+import 'Components/left_drawer.dart';
 
 class HomePage extends StatefulWidget {
   static String tag = 'home-page';
@@ -82,7 +83,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       key: _scaffoldKey,
-      drawer: new LeftDrawer(),
+      drawer: LeftDrawer(),
       appBar: AppBar(
         leading: IconButton(
             icon: Icon(Icons.menu),
