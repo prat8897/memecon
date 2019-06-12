@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:memecon/login_page.dart';
 import 'package:memecon/home_page.dart';
 import 'package:memecon/settings_page.dart';
-import 'package:memecon/pageview_screen.dart';
 import 'package:memecon/Services/auth_flow.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -48,7 +47,6 @@ class MyApp extends StatelessWidget {
     LoginPage.tag: (context) => LoginPage(),
     HomePage.tag: (context) => HomePage(reddit: null,),
     SettingsPage.tag: (context) => SettingsPage(),
-    PageViewScreen.tag: (context) => PageViewScreen(),
   };
 
   @override
