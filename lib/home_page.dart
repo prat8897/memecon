@@ -110,7 +110,6 @@ class _HomePageState extends State<HomePage> {
                 title: Text("/r/MemeEconomy"),
               ),
               gridBody(),
-              //gridd(),
             ],
           ),
           Scaffold(

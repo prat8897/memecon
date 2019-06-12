@@ -51,6 +51,6 @@ Future<Reddit> restoreRedditUser(credentialsJSON) async {
     userAgent: userAgent,
     redirectUri: redirectUri,
   );
-  print(await reddit.user.me());
+  //print(await reddit.user.me());
   return reddit;
 }
