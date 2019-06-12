@@ -19,10 +19,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   //leftdrawer state
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  
+
+  PageController _controller = PageController(
+    keepPage: false,
+  );
+
   List<Submission> submissions = [];
   int _stackindex = 0;
 
@@ -33,23 +36,25 @@ class _HomePageState extends State<HomePage> {
     fetchPosts();
   }
 
-  void fetchPosts(){
+  //TODO make this a <Future>, put fetchposts in services
+  void fetchPosts() {
     Stream hotPosts = widget.reddit.subreddit('MemeEconomy').hot();
     hotPosts.map((content) => content as Submission);
     hotPosts.listen((onData) {
       setState(() {
-        submissions.add(onData);  
+        submissions.add(onData);
       });
     });
     print(submissions.length);
   }
 
-  Center gridBody() {
-    return Center(
-      child: GridView.builder(
-        itemCount: submissions.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-        itemBuilder: (context, index) {
+  SliverGrid gridBody() {
+    return SliverGrid(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3
+      ),
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
           /*
           PostView newPostView = PostView(
               key: ValueKey<String>(submissions.elementAt(index).id),
@@ -63,56 +68,59 @@ class _HomePageState extends State<HomePage> {
                 _controller.jumpToPage(index);
               });
             },
-            child: Image.network(submissions.elementAt(index).thumbnail.toString()),
+            child: Image.network(
+              submissions.elementAt(index).thumbnail.toString()
+            ),
           );
         },
-      )
+        childCount: submissions.length,
+      ),
     );
   }
 
-  PageController _controller = PageController(
-    keepPage: false,
-  );
-
   PageView pageView() {
-    
-    return PageView (
+    return PageView(
       //itemCount: submissions.length,
       controller: _controller,
-
       children: <Widget>[
         for (Submission post in submissions)
-        Image.network(post.url.toString())
+          Image.network(post.url.toString())
       ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       key: _scaffoldKey,
       drawer: LeftDrawer(),
-      appBar: AppBar(
-        leading: IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () => _scaffoldKey.currentState.openDrawer()),
-        centerTitle: true,
-        title: Text("/r/MemeEconomy"),
-      ),
       body: IndexedStack(
         index: _stackindex,
         children: <Widget>[
-          gridBody(),
-          Scaffold(
-            body: WillPopScope(
-              onWillPop: (){
-                setState(() => _stackindex = 0);
-              },
-              child: pageView(),
-            )
+          CustomScrollView(
+            slivers: <Widget>[
+              SliverAppBar(
+                floating: false,
+                pinned: false,
+                snap: false,
+                leading: IconButton(
+                    icon: Icon(Icons.menu),
+                    onPressed: () => _scaffoldKey.currentState.openDrawer()),
+                centerTitle: true,
+                title: Text("/r/MemeEconomy"),
+              ),
+              gridBody(),
+              //gridd(),
+            ],
           ),
-        ],  
+          Scaffold(
+              body: WillPopScope(
+            onWillPop: () {
+              setState(() => _stackindex = 0);
+            },
+            child: pageView(),
+          )),
+        ],
       ),
     );
   }
