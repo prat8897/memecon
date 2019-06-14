@@ -3,7 +3,8 @@ import 'package:draw/draw.dart';
 import 'package:flutter/material.dart';
 import 'package:memecon/settings_page.dart';
 import 'package:memecon/Services/auth_flow.dart';
-import 'Components/left_drawer.dart';
+import 'package:memecon/Components/post_view.dart';
+import 'package:memecon/Components/left_drawer.dart';
 
 class HomePage extends StatefulWidget {
   static String tag = 'home-page';
@@ -22,7 +23,7 @@ class _HomePageState extends State<HomePage> {
   //leftdrawer state
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  PageController _controller = PageController(
+  PageController _pageViewController = PageController(
     keepPage: false,
   );
 
@@ -45,7 +46,6 @@ class _HomePageState extends State<HomePage> {
         submissions.add(onData);
       });
     });
-    print(submissions.length);
   }
 
   SliverGrid gridBody() {
@@ -55,17 +55,11 @@ class _HomePageState extends State<HomePage> {
       ),
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          /*
-          PostView newPostView = PostView(
-              key: ValueKey<String>(submissions.elementAt(index).id),
-              post: Post(submission: submissions.elementAt(index))
-          );
-          */
           return InkWell(
             onTap: () {
               setState(() {
                 _stackindex = 1;
-                _controller.jumpToPage(index);
+                _pageViewController.jumpToPage(index);
               });
             },
             child: Image.network(
@@ -75,17 +69,6 @@ class _HomePageState extends State<HomePage> {
         },
         childCount: submissions.length,
       ),
-    );
-  }
-
-  PageView pageView() {
-    return PageView(
-      //itemCount: submissions.length,
-      controller: _controller,
-      children: <Widget>[
-        for (Submission post in submissions)
-          Image.network(post.url.toString())
-      ],
     );
   }
 
@@ -113,12 +96,21 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
           Scaffold(
-              body: WillPopScope(
-            onWillPop: () {
-              setState(() => _stackindex = 0);
-            },
-            child: pageView(),
-          )),
+            body: WillPopScope(
+              onWillPop: () {
+                setState(() => _stackindex = 0);
+              },
+              child: PageView(
+                //itemCount: submissions.length,
+                scrollDirection: Axis.horizontal,
+                controller: _pageViewController,
+                children: <Widget>[
+                  for (Submission post in submissions)
+                    PostView(post: post)
+                ],
+              ),
+            )
+          ),
         ],
       ),
     );
