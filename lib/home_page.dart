@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:draw/draw.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:memecon/settings_page.dart';
 import 'package:memecon/Services/auth_flow.dart';
 import 'package:memecon/Components/post_view.dart';
@@ -48,6 +49,24 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Widget thumbnail(index) {
+    if (!submissions.elementAt(index).isSelf ) {
+      return CachedNetworkImage(
+        imageUrl: submissions.elementAt(index).thumbnail.toString(),
+        placeholder: (context, url) => SizedBox(
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+          height: 4.0,
+          width: 4.0,
+        ),
+        errorWidget: (context, url, error) => Icon(Icons.error),
+      );
+    } else {
+      return Icon(Icons.error);
+    }
+  }
+
   SliverGrid gridBody() {
     return SliverGrid(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -62,9 +81,7 @@ class _HomePageState extends State<HomePage> {
                 _pageViewController.jumpToPage(index);
               });
             },
-            child: Image.network(
-              submissions.elementAt(index).thumbnail.toString()
-            ),
+            child: thumbnail(index),
           );
         },
         childCount: submissions.length,

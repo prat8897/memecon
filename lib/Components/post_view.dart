@@ -1,14 +1,17 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:draw/draw.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class PostView extends StatefulWidget {
   const PostView({
     Key key,
     @required this.post,
+    this.comments,
   }) : super(key: key);
 
   final Submission post;
+  final CommentForest comments;
 
   @override
   _PostViewState createState() => _PostViewState();
@@ -18,7 +21,7 @@ class _PostViewState extends State<PostView> {
   @override
   void initState() {
     super.initState();
-    populatePost();
+    // populatePost();
     _listController.addListener(_scrollListener);
   }
 
@@ -26,7 +29,7 @@ class _PostViewState extends State<PostView> {
   TrackingScrollController _listController = TrackingScrollController();
   CommentForest _postComments;
 
-  _scrollListener() {
+  void _scrollListener() {
     if (_listController.offset <= _listController.position.minScrollExtent &&
         !_listController.position.outOfRange) {
       _postViewController.previousPage(
@@ -50,24 +53,7 @@ class _PostViewState extends State<PostView> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final memepost = Stack(
-      children: <Widget>[
-        Center(child: Image.network(widget.post.url.toString())),
-        Text(widget.post.title),
-        Align(
-          alignment: Alignment.bottomRight,
-          child: Text(widget.post.upvotes.toString()),
-        ),
-        Align(
-          alignment: Alignment.bottomLeft,
-          child: Text(widget.post.author),
-        ),
-      ],
-    );
-
-    Widget comments() {
+  Widget comments() {
       List<Text> comments = List<Text>();
       if (_postComments != null) {
         for (var comm in _postComments.toList()) {
@@ -88,11 +74,46 @@ class _PostViewState extends State<PostView> {
       }
     }
 
+    Widget memepost() {
+      Widget body() {
+        if (widget.post.isSelf) {
+          return Center(child: Text(widget.post.selftext));
+        } else {
+          return Center(
+            // child: Image.network(widget.post.url.toString())
+            child: CachedNetworkImage(
+              imageUrl: widget.post.url.toString(),
+              placeholder: (context, url) => CircularProgressIndicator(),
+              errorWidget: (context, url, error) => Icon(Icons.error),
+            )
+          );
+        }
+      }
+
+      return Stack(
+        children: <Widget>[
+          body(),
+          Text(widget.post.title),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Text(widget.post.upvotes.toString()),
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Text(widget.post.author),
+          ),
+        ],
+      );
+    }
+
+  @override
+  Widget build(BuildContext context) {
+
     return PageView(
       scrollDirection: Axis.vertical,
       controller: _postViewController,
       children: <Widget>[
-        memepost,
+        memepost(),
         comments(),
       ],
     );
