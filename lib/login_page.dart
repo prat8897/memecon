@@ -17,7 +17,7 @@ class _LoginPageState extends State<LoginPage> {
       setState(() => this._status = 'loading');
       try {
         await initializeRedditUser().then((reddit) {
-          setState(() => this._status = 'success!');
+          setState(() => this._status = 'successful login attempt!');
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => HomePage(reddit: reddit,)),
@@ -25,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
           print("the sign in button just got clicked");
         });
       } catch (e) {
-        setState(() => this._status = 'failed');
+        setState(() => this._status = 'failed login attempt');
       }
     }
 
@@ -38,28 +38,6 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
 
-    final email = TextFormField(
-      keyboardType: TextInputType.emailAddress,
-      autofocus: false,
-      initialValue: 'sample@email.com',
-      decoration: InputDecoration(
-        hintText: 'Email',
-        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-      ),
-    );
-
-    final password = TextFormField(
-      autofocus: false,
-      initialValue: 'some password',
-      obscureText: true,
-      decoration: InputDecoration(
-        hintText: 'Password',
-        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-      ),
-    );
-
     final loginButton = Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
       child: RaisedButton(
@@ -69,32 +47,15 @@ class _LoginPageState extends State<LoginPage> {
         onPressed: submit,
         padding: EdgeInsets.all(12),
         color: Colors.lightBlueAccent,
-        child: Text('Log In', style: TextStyle(color: Colors.white)),
+        child: Text('Log In With Reddit', style: TextStyle(color: Colors.white)),
       ),
-    );
-
-    final forgotLabel = FlatButton(
-      child: Text(
-        'Forgot password?',
-        style: TextStyle(color: Colors.black54),
-      ),
-      onPressed: () {},
     );
 
     final loginCard = Container(
       color: Colors.lime[100],
-      child: ListView(
-        shrinkWrap: true,
+      child: Container(
         padding: EdgeInsets.only(left: 24.0, right: 24.0),
-        children: <Widget>[
-          SizedBox(height: 48.0),
-          email,
-          SizedBox(height: 8.0),
-          password,
-          SizedBox(height: 24.0),
-          loginButton,
-          forgotLabel
-        ],
+        child: loginButton,
       ),
     );
 
