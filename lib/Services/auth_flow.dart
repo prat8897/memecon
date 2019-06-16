@@ -20,7 +20,8 @@ Future<Reddit> initializeRedditUser() async {
   final authUrl = reddit.auth.url(['*'], userAgent, compactLogin: true);
 
   //Go to reddit.com via chrome, login, and authenticate app with client
-  final result = await FlutterWebAuth.authenticate(url: authUrl.toString(), callbackUrlScheme: "memeconapp");
+  final result = await FlutterWebAuth.authenticate(
+      url: authUrl.toString(), callbackUrlScheme: "memeconapp");
 
   //Parse access code from callback Uri
   final accessCode = Uri.parse(result).queryParameters['code'].toString();
@@ -36,9 +37,11 @@ Future<Reddit> initializeRedditUser() async {
 
   //Flutter Secure Storage to save reddit credentials
   //https://github.com/mogol/flutter_secure_storage
-  
+
   final storage = new FlutterSecureStorage();
-  await storage.write(key: "credentialsJSON", value: reddit.auth.credentials.toJson().toString());
+  await storage.write(
+      key: "credentialsJSON",
+      value: reddit.auth.credentials.toJson().toString());
 
   return reddit;
 }

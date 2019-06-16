@@ -54,61 +54,59 @@ class _PostViewState extends State<PostView> {
   }
 
   Widget comments() {
-      List<Text> comments = List<Text>();
-      if (_postComments != null) {
-        for (var comm in _postComments.toList()) {
-          if (comm is Comment) {
-            comments.add(Text(comm.body));
-          }
+    List<Text> comments = List<Text>();
+    if (_postComments != null) {
+      for (var comm in _postComments.toList()) {
+        if (comm is Comment) {
+          comments.add(Text(comm.body));
         }
-      } else {
-        print("_postComments is null");
-        populatePost();
       }
-
-      if (comments != null) {
-        return ListView(
-          controller: _listController,
-          children: <Widget>[...comments],
-        );
-      }
+    } else {
+      print("_postComments is null");
+      populatePost();
     }
 
-    Widget memepost() {
-      Widget body() {
-        if (widget.post.isSelf) {
-          return Center(child: Text(widget.post.selftext));
-        } else {
-          return Center(
-            // child: Image.network(widget.post.url.toString())
-            child: CachedNetworkImage(
-              imageUrl: widget.post.url.toString(),
-              placeholder: (context, url) => CircularProgressIndicator(),
-              errorWidget: (context, url, error) => Icon(Icons.error),
-            )
-          );
-        }
-      }
-
-      return Stack(
-        children: <Widget>[
-          body(),
-          Text(widget.post.title),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Text(widget.post.upvotes.toString()),
-          ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Text(widget.post.author),
-          ),
-        ],
+    if (comments != null) {
+      return ListView(
+        controller: _listController,
+        children: <Widget>[...comments],
       );
     }
+  }
+
+  Widget memepost() {
+    Widget body() {
+      if (widget.post.isSelf) {
+        return Center(child: Text(widget.post.selftext));
+      } else {
+        return Center(
+            // child: Image.network(widget.post.url.toString())
+            child: CachedNetworkImage(
+          imageUrl: widget.post.url.toString(),
+          placeholder: (context, url) => CircularProgressIndicator(),
+          errorWidget: (context, url, error) => Icon(Icons.error),
+        ));
+      }
+    }
+
+    return Stack(
+      children: <Widget>[
+        body(),
+        Text(widget.post.title),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Text(widget.post.upvotes.toString()),
+        ),
+        Align(
+          alignment: Alignment.bottomLeft,
+          child: Text(widget.post.author),
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return PageView(
       scrollDirection: Axis.vertical,
       controller: _postViewController,

@@ -50,16 +50,16 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget thumbnail(index) {
-    if (!submissions.elementAt(index).isSelf ) {
+    if (!submissions.elementAt(index).isSelf) {
       return CachedNetworkImage(
         imageUrl: submissions.elementAt(index).thumbnail.toString(),
         placeholder: (context, url) => SizedBox(
-          child: Center(
-            child: CircularProgressIndicator(),
-          ),
-          height: 4.0,
-          width: 4.0,
-        ),
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+              height: 4.0,
+              width: 4.0,
+            ),
         errorWidget: (context, url, error) => Icon(Icons.error),
       );
     } else {
@@ -69,9 +69,8 @@ class _HomePageState extends State<HomePage> {
 
   SliverGrid gridBody() {
     return SliverGrid(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3
-      ),
+      gridDelegate:
+          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
       delegate: SliverChildBuilderDelegate(
         (context, index) {
           return InkWell(
@@ -113,21 +112,19 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
           Scaffold(
-            body: WillPopScope(
-              onWillPop: () {
-                setState(() => _stackindex = 0);
-              },
-              child: PageView(
-                //itemCount: submissions.length,
-                scrollDirection: Axis.horizontal,
-                controller: _pageViewController,
-                children: <Widget>[
-                  for (Submission post in submissions)
-                    PostView(post: post)
-                ],
-              ),
-            )
-          ),
+              body: WillPopScope(
+            onWillPop: () {
+              setState(() => _stackindex = 0);
+            },
+            child: PageView(
+              //itemCount: submissions.length,
+              scrollDirection: Axis.horizontal,
+              controller: _pageViewController,
+              children: <Widget>[
+                for (Submission post in submissions) PostView(post: post)
+              ],
+            ),
+          )),
         ],
       ),
     );

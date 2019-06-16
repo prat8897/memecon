@@ -20,7 +20,11 @@ class _LoginPageState extends State<LoginPage> {
         await initializeRedditUser().then((reddit) {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => HomePage(reddit: reddit,)),
+            MaterialPageRoute(
+              builder: (context) => HomePage(
+                reddit: reddit,
+              )
+            ),
           );
           print("the sign in button just got clicked");
         });
@@ -40,9 +44,12 @@ class _LoginPageState extends State<LoginPage> {
 
     Widget logintext() {
       if (this._status == 'successful login attempt!') {
-        return CircularProgressIndicator(backgroundColor: Colors.cyan,);
+        return CircularProgressIndicator(
+          backgroundColor: Colors.cyan,
+        );
       } else if (this._status == 'no-action') {
-        return Text('Log In With Reddit', style: TextStyle(color: Colors.white));
+        return Text('Log In With Reddit',
+            style: TextStyle(color: Colors.white));
       }
     }
 
