@@ -16,8 +16,8 @@ class _LoginPageState extends State<LoginPage> {
     void submit() async {
       setState(() => this._status = 'loading');
       try {
+        setState(() => this._status = 'successful login attempt!');
         await initializeRedditUser().then((reddit) {
-          setState(() => this._status = 'successful login attempt!');
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => HomePage(reddit: reddit,)),
@@ -38,6 +38,14 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
 
+    Widget logintext() {
+      if (this._status == 'successful login attempt!') {
+        return CircularProgressIndicator(backgroundColor: Colors.cyan,);
+      } else if (this._status == 'no-action') {
+        return Text('Log In With Reddit', style: TextStyle(color: Colors.white));
+      }
+    }
+
     final loginButton = Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
       child: RaisedButton(
@@ -47,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
         onPressed: submit,
         padding: EdgeInsets.all(12),
         color: Colors.lightBlueAccent,
-        child: Text('Log In With Reddit', style: TextStyle(color: Colors.white)),
+        child: logintext(),
       ),
     );
 
